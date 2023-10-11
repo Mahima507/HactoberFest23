@@ -1,0 +1,45 @@
+To concatenate with condition in MongoDB, use concat. 
+Let us create a collection with documents −
+
+> db.demo745.insertOne({Value1:"100",Value2:"100"});
+{
+   "acknowledged" : true,
+   "insertedId" : ObjectId("5eae6419a930c785c834e554")
+}
+> db.demo745.insertOne({Value1:"40",Value2:"50"});
+{
+   "acknowledged" : true,
+   "insertedId" : ObjectId("5eae6421a930c785c834e555")
+}
+> db.demo745.insertOne({Value1:"13",Value2:"45"});
+{
+   "acknowledged" : true,
+   "insertedId" : ObjectId("5eae6429a930c785c834e556")
+}
+Display all documents from a collection with the help of find() method −
+
+> db.demo745.find();
+This will produce the following output −
+
+{ "_id" : ObjectId("5eae6419a930c785c834e554"), "Value1" : "100", "Value2" : "100" }
+{ "_id" : ObjectId("5eae6421a930c785c834e555"), "Value1" : "40", "Value2" : "50" }
+{ "_id" : ObjectId("5eae6429a930c785c834e556"), "Value1" : "13", "Value2" : "45" }
+Followings is the query to concatenate with condition −
+
+> db.demo745.aggregate(
+...    [
+...       { "$redact": {
+...          "$cond": [
+...             { "$eq": [
+...                { "$concat": [ "$Value1","$Value2" ] },
+...                   "1345"
+...                ]},
+...                "$$KEEP",
+...                "$$PRUNE"
+...          ]
+...       }}
+...    ]
+... )
+This will produce the following output −
+
+{ "_id" : ObjectId("5eae6429a930c785c834e556"), "Value1" : "13", "Value2" : "45" }
